@@ -63,9 +63,14 @@ app.config['WEBPACK_TEMP'] = 'temp.js'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'development')
 
+app.config['DISABLE_SSL'] = os.environ.get('DISABLE_SSL', False)
+
 toolbar = DebugToolbarExtension(app)
 app.shell_context_processor(shell_context)
-sslify = SSLify(app)
+
+if not app.config['DISABLE_SSL']:
+    sslify = SSLify(app)
+
 db.init_app(app)
 login_manager.init_app(app)
 if os.environ.get('SENTRY_DSN'):
